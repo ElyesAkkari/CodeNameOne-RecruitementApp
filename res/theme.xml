@@ -44,12 +44,13 @@
         <val key="BottomPad.transparency" value="0" />
         <val key="Button.align" value="4" />
         <border key="Button.border" type="round" roundBorderColor="16723285" opacity="255" strokeColor="0" strokeOpacity="255" strokeThickness="0.0" strokeMM="false" shadowSpread="10" shadowOpacity="0" shadowX="0.5" shadowY="0.5" shadowBlur="10.0" shadowMM="false" rectangle="true" />
+        <val key="Button.derive" value="Button" />
         <val key="Button.fgColor" value="ffffff" />
         <font key="Button.font" type="ttf" face="0" style="0" size="0" name="native:MainLight" family="native:MainLight" sizeSettings="3" actualSize="2.5" />
         <val key="Button.marUnit" value="2,2,2,2" />
-        <val key="Button.margin" value="3,3,2,2" />
+        <val key="Button.margin" value="3.0,3.0,2.0,2.0" />
         <val key="Button.padUnit" value="2,2,2,2" />
-        <val key="Button.padding" value="2,2,2,2" />
+        <val key="Button.padding" value="2.0,2.0,2.0,2.0" />
         <val key="Button.press#align" value="4" />
         <border key="Button.press#border" type="round" roundBorderColor="12982329" opacity="255" strokeColor="0" strokeOpacity="255" strokeThickness="0.0" strokeMM="false" shadowSpread="10" shadowOpacity="0" shadowX="0.5" shadowY="0.5" shadowBlur="10.0" shadowMM="false" rectangle="true" />
         <val key="Button.press#fgColor" value="ffffff" />
@@ -63,16 +64,16 @@
         <val key="Button.sel#fgColor" value="ffffff" />
         <font key="Button.sel#font" type="ttf" face="0" style="0" size="0" name="native:MainLight" family="native:MainLight" sizeSettings="3" actualSize="2.5" />
         <val key="Button.sel#marUnit" value="2,2,2,2" />
-        <val key="Button.sel#margin" value="3,3,2,2" />
+        <val key="Button.sel#margin" value="3.0,3.0,2.0,2.0" />
         <val key="Button.sel#padUnit" value="2,2,2,2" />
-        <val key="Button.sel#padding" value="2,2,2,2" />
+        <val key="Button.sel#padding" value="2.0,2.0,2.0,2.0" />
         <val key="CenterLabel.align" value="4" />
         <val key="CenterLabel.derive" value="Label" />
         <val key="CenterLink.align" value="4" />
-        <val key="CenterLink.fgColor" value="ffffff" />
+        <val key="CenterLink.fgColor" value="3366ff" />
         <font key="CenterLink.font" type="ttf" face="0" style="0" size="0" name="native:MainLight" family="native:MainLight" sizeSettings="3" actualSize="2.5" />
         <val key="CenterLink.padUnit" value="2,2,2,2" />
-        <val key="CenterLink.padding" value="2,2,1,1" />
+        <val key="CenterLink.padding" value="2.0,2.0,1.0,1.0" />
         <val key="CenterLink.transparency" value="0" />
         <val key="DatePickerDay.align" value="4" />
         <val key="DatePickerDay.fgColor" value="ffffff" />

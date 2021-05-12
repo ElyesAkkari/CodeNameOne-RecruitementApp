@@ -133,6 +133,9 @@ public class NewsfeedForm extends BaseForm {
             arrow.setVisible(true);
             updateArrowPosition(all, arrow);
         });
+        myFavorite.addActionListener(l->
+        new ResultsForm(res).show()
+        );
         bindButtonSelection(all, arrow);
         bindButtonSelection(featured, arrow);
         bindButtonSelection(popular, arrow);
