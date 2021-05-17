@@ -19,12 +19,19 @@
 package com.codename1.uikit.cleanmodern;
 
 import com.codename1.components.ScaleImageLabel;
+import com.codename1.components.ShareButton;
 import com.codename1.components.SpanLabel;
 import com.codename1.components.ToastBar;
+import com.codename1.io.FileSystemStorage;
+import com.codename1.io.Log;
+import com.codename1.io.Util;
+import com.codename1.share.EmailShare;
+import com.codename1.share.ShareService;
 import com.codename1.ui.Button;
 import com.codename1.ui.ButtonGroup;
 import com.codename1.ui.Component;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Graphics;
@@ -41,9 +48,12 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
+import com.codename1.ui.util.ImageIO;
 import com.codename1.ui.util.Resources;
 import com.mobilePIDEV.entites.Participation;
 import com.mobilePIDEV.services.ServiceParticipation;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 //import java.util.concurrent.TimeUnit;
@@ -152,7 +162,7 @@ public class ResultsForm extends BaseForm {
         });
         participation = ServiceParticipation.getInstance().getAllParts();
         for (Participation p : participation) {
-            addButton(res.getImage("news-item-1.jpg"), p, false, 26, 32);
+            addButton(res.getImage("result.jpg"), p, false, 26, 32, res);
 
         }
 //        addButton(res.getImage("news-item-2.jpg"), "Fusce ornare cursus masspretium tortor integer placera.", true, 15, 21);
@@ -205,7 +215,7 @@ public class ResultsForm extends BaseForm {
         swipe.addTab("", page1);
     }
 
-    private void addButton(Image img, Participation p, boolean liked, int likeCount, int commentCount) {
+    private void addButton(Image img, Participation p, boolean liked, int likeCount, int commentCount, Resources res) {
         int height = Display.getInstance().convertToPixels(11.5f);
         int width = Display.getInstance().convertToPixels(14f);
         Date date = new Date();
@@ -220,11 +230,11 @@ public class ResultsForm extends BaseForm {
         if (p.getQuiz() != null) {
             title = "Quiz : " + p.getQuiz().getTitre()
                     + "\n Note : " + p.getNote()
-                    + "\n posted : " + days + " days ago.";
+                    + "\n" + days + " days ago.";
             TextArea ta = new TextArea(title);
         } else {
             title = "Note : " + p.getNote()
-                    + "\n posted : " + days + " days ago.";
+                    + "\n" + days + " days ago.";
         }
         TextArea ta = new TextArea(title);
         ta.setUIID("NewsTopLine");
@@ -249,12 +259,46 @@ public class ResultsForm extends BaseForm {
                         BoxLayout.encloseX(likes, comments)
                 ));
         add(cnt);
-        image.addActionListener(e -> ToastBar.showMessage(title, FontImage.MATERIAL_INFO));
+        image.addActionListener(e -> {
+            Dialog dlg = new Dialog();
+            ShareButton sb = new ShareButton();
+            sb.setText("Share Result");
+
+            Image screenshot = Image.createImage(getWidth(), getHeight());
+            revalidate();
+            setVisible(true);
+            paintComponent(screenshot.getGraphics(), true);
+
+            String imageFile = FileSystemStorage.getInstance().getAppHomePath() + "screenshot.png";
+            try (OutputStream os = FileSystemStorage.getInstance().openOutputStream(imageFile)) {
+                ImageIO.getImageIO().save(screenshot, os, ImageIO.FORMAT_PNG, 1);
+            } catch (IOException err) {
+                Log.e(err);
+            }
+            Image fb_logo = res.getImage("fb.png");
+            fb_logo = fb_logo.scaledHeight(85);
+            ShareService fb = new ShareService("custom Facebook", fb_logo) {
+                @Override
+                public void share(String text) {
+                    sharePost(title);
+                }
+                @Override
+                public boolean canShareImage() {
+                    return true;
+                }
+            };
+            //sb.setImageToShare(imageFile, "image/png");
+            sb.setTextToShare(title);
+            sb.addShareService(fb);
+            dlg.add(sb);
+            Display.getInstance().createContact("Elyes", "Akkari", "+21656782825", "70112233", "+21656782825", "elyesakkari0@gmail.com");
+            int h = Display.getInstance().getDisplayHeight();
+            dlg.setDisposeWhenPointerOutOfBounds(true);
+            dlg.show(h / 8 * 7, 0, 0, 0);
+        });
     }
 
-    private void addResult(Image img) {
-
-    }
+  
 
     private void bindButtonSelection(Button b, Label arrow) {
         b.addActionListener(e -> {
@@ -262,5 +306,15 @@ public class ResultsForm extends BaseForm {
                 updateArrowPosition(b, arrow);
             }
         });
+    }
+    
+    public void sharePost (String str){
+      //String textToShare="test\n text";
+        Display.getInstance().execute("https://www.facebook.com/sharer/sharer.php"
+                + "?u="+Util.encodeUrl("http://127.0.0.1:8000")
+                + "&title=A+nice+question+about+Facebook"
+                +"&p[images][0]="+Util.encodeUrl("https://upload.wikimedia.org/wikipedia/commons/b/b6/Logo_ESPRIT_-_Tunisie.png")
+                + "&quote="+Util.encodeUrl("I've passed a Quiz with IMPACTEERS! \n"+str)
+                + "&description=Apparently%2C+the+accepted+answer+is+not+correct.");
     }
 }

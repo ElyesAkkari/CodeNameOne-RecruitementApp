@@ -262,7 +262,5 @@ public class AddReponseForm extends BaseForm {
     private void addStringValue(String str, Component c) {
         add(BorderLayout.west(new Label(str, "PaddedLabel"))
                 .add(BorderLayout.CENTER, c));
-
-        //add(createLineSeparator(0x33fec3));
     }
 }

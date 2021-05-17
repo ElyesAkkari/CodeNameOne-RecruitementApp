@@ -7,6 +7,7 @@
     <image name="d.png"  />
     <image name="dog.jpg"  />
     <image name="facebook-logo.png" type="multi"  />
+    <image name="fb.png"  />
     <image name="Logo.png" type="multi"  />
     <image name="news-item-1.jpg"  />
     <image name="news-item-2.jpg"  />
@@ -19,6 +20,7 @@
     <image name="on-off-on.png" type="multi"  />
     <image name="profile-background.jpg"  />
     <image name="profile-pic.jpg" type="multi"  />
+    <image name="result.jpg"  />
     <image name="s.png"  />
     <image name="Screenshot_2021-05-09 Impacteers.png"  />
     <image name="signin-background.jpg"  />
@@ -335,6 +337,7 @@
         <val key="transparency" value="0" />
     </theme>
     <image name="timeline-background.jpg"  />
+    <image name="toggleSlider.png"  />
     <image name="twitter-logo.png" type="multi"  />
     <image name="welcome-background.jpg"  />
     <image name="welcome-slide-1.png" type="multi"  />

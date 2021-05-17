@@ -60,6 +60,20 @@ public class ServiceParticipation {
         NetworkManager.getInstance().addToQueueAndWait(req);
         return participations;
     }
+    public ArrayList<Participation> getAllParts(int i) {
+        String url = Statics.BASE_URL + "participationJSON";
+        req.setUrl(url);
+        req.setPost(false);
+        req.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                participations = parseParts(new String(req.getResponseData()),i);
+                req.removeResponseListener(this);
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(req);
+        return participations;
+    }
 
     public ArrayList<Participation> parseParts(String jsonText) {
         try {
@@ -95,6 +109,47 @@ public class ServiceParticipation {
                  else     
                 {   p.setArchive(true);}
                 participations.add(p);
+            }
+        } catch (IOException ex) {
+
+        }
+        return participations;
+    }
+    public ArrayList<Participation> parseParts(String jsonText, int i) {
+        try {
+            participations = new ArrayList<>();
+            JSONParser j = new JSONParser();// Instanciation d'un objet JSONParser permettant le parsing du résultat json
+
+            Map<String, Object> tasksListJson = j.parseJSON(new CharArrayReader(jsonText.toCharArray()));
+
+            List<Map<String, Object>> list = (List<Map<String, Object>>) tasksListJson.get("root");
+            for (Map<String, Object> obj : list) {
+                Participation p = new Participation();
+                float id = Float.parseFloat(obj.get("id").toString());
+                p.setId((int) id);
+                p.setNote(((int) Float.parseFloat(obj.get("note").toString())));
+                if(obj.get("quiz") != null){
+                Map<String, Object> listq = (Map<String, Object>) obj.get("quiz");
+                for (Object o : listq.values())
+                {
+                 p.setQuiz(new Quiz((int) Float.parseFloat(listq.get("id").toString()), 0, listq.get("titre").toString(), listq.get("owner").toString()));
+                 p.setQuiz_id((int) Float.parseFloat(listq.get("id").toString()));
+                }
+                }
+                //System.out.println(listq);
+                String sDate1 = obj.get("added").toString();
+                try {
+                    Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(sDate1);
+                    p.setAdded(date1);
+                } catch (ParseException ex) {
+                    System.out.println(ex.getMessage());
+                }
+                if ((obj.get("archive").toString())=="false") 
+                    p.setArchive(false);
+                 else     
+                {   p.setArchive(true);}
+                if(p.getQuiz_id()==i){
+                participations.add(p);}
             }
         } catch (IOException ex) {
 
