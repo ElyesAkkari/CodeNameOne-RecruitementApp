@@ -22,6 +22,7 @@ package com.codename1.uikit.cleanmodern;
 import com.codename1.components.FloatingHint;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
@@ -31,6 +32,8 @@ import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.util.Resources;
+import com.mobilePIDEV.services.ServiceUtilisateur;
+import javax.mail.MessagingException;
 
 /**
  * Signup UI
@@ -50,14 +53,16 @@ public class SignUpForm extends BaseForm {
         setUIID("SignIn");
                 
         TextField username = new TextField("", "Username", 20, TextField.ANY);
+        TextField prenom = new TextField("", "Prenom", 20, TextField.ANY);
         TextField email = new TextField("", "E-Mail", 20, TextField.EMAILADDR);
         TextField password = new TextField("", "Password", 20, TextField.PASSWORD);
         TextField confirmPassword = new TextField("", "Confirm Password", 20, TextField.PASSWORD);
         username.setSingleLineTextArea(false);
+        prenom.setSingleLineTextArea(false);
         email.setSingleLineTextArea(false);
         password.setSingleLineTextArea(false);
         confirmPassword.setSingleLineTextArea(false);
-        Button next = new Button("Next");
+        Button next = new Button("Sign Up");
         Button signIn = new Button("Sign In");
         signIn.addActionListener(e -> previous.showBack());
         signIn.setUIID("Link");
@@ -66,6 +71,8 @@ public class SignUpForm extends BaseForm {
         Container content = BoxLayout.encloseY(
                 new Label("Sign Up", "LogoLabel"),
                 new FloatingHint(username),
+                createLineSeparator(),
+                new FloatingHint(prenom),
                 createLineSeparator(),
                 new FloatingHint(email),
                 createLineSeparator(),
@@ -81,7 +88,15 @@ public class SignUpForm extends BaseForm {
                 FlowLayout.encloseCenter(alreadHaveAnAccount, signIn)
         ));
         next.requestFocus();
-        next.addActionListener(e -> new ActivateForm(res).show());
+        next.addActionListener((e) ->{
+            ServiceUtilisateur.getInstance().signup(username, prenom, email, password, confirmPassword, res);
+            Dialog.show("Success","Account is saved","OK",null);
+            try {
+                new SignInForm(res).show();
+            } catch (MessagingException ex) {
+                System.out.println(ex);
+            }
+        });
     }
     
 }
