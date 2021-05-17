@@ -213,7 +213,7 @@ public class ResultStatForm extends BaseForm {
         System.out.println("added");
 
         for (Participation p : partsinQ) {
-            addButton(res.getImage("news-item-1.jpg"), p, false, 26, 32);
+            addButton(res.getImage("result.jpg"), p, false, 26, 32);
 
         }
     }

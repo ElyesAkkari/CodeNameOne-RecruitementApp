@@ -34,6 +34,7 @@ import com.codename1.ui.layouts.Layout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
 import com.mobilePIDEV.entites.Quiz;
+import com.mobilePIDEV.services.SessionManager;
 
 /**
  * Base class for the forms with common functionality
@@ -87,11 +88,15 @@ public class BaseForm extends Form {
         q.setId(2);
         tb.addMaterialCommandToSideMenu("Newsfeed", FontImage.MATERIAL_UPDATE, e -> new NewsfeedForm(res).show());
         tb.addMaterialCommandToSideMenu("Entretien", FontImage.MATERIAL_LIST, e -> new NewsfeedForm(res).show());
-        tb.addMaterialCommandToSideMenu("Type Entretien", FontImage.MATERIAL_LIST, e -> new NewsfeedForm(res).show());
-        tb.addMaterialCommandToSideMenu("Quiz Managment", FontImage.MATERIAL_QUESTION_ANSWER, e -> new QuizForm(res).show());
+        
         tb.addMaterialCommandToSideMenu("Profile", FontImage.MATERIAL_SETTINGS, e -> new ProfileForm(res).show());
         tb.addMaterialCommandToSideMenu("test quiz", FontImage.MATERIAL_SETTINGS, e -> new QuizTestForm(res, q).show());
-        tb.addMaterialCommandToSideMenu("Results", FontImage.MATERIAL_PIE_CHART, e -> new ResultStatForm(res).show());
+        
+        if (SessionManager.getRole().toLowerCase().equals("admin")) {
+            tb.addMaterialCommandToSideMenu("Results", FontImage.MATERIAL_PIE_CHART, e -> new ResultStatForm(res).show());
+            tb.addMaterialCommandToSideMenu("Type Entretien", FontImage.MATERIAL_LIST, e -> new NewsfeedForm(res).show());
+            tb.addMaterialCommandToSideMenu("Quiz Managment", FontImage.MATERIAL_QUESTION_ANSWER, e -> new QuizForm(res).show());
+        }
         tb.addMaterialCommandToSideMenu("Logout", FontImage.MATERIAL_EXIT_TO_APP, e -> new WalkthruForm(res).show());
     }
 }

@@ -52,6 +52,7 @@ import com.codename1.ui.util.ImageIO;
 import com.codename1.ui.util.Resources;
 import com.mobilePIDEV.entites.Participation;
 import com.mobilePIDEV.services.ServiceParticipation;
+import com.mobilePIDEV.services.SessionManager;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -162,7 +163,8 @@ public class ResultsForm extends BaseForm {
         });
         participation = ServiceParticipation.getInstance().getAllParts();
         for (Participation p : participation) {
-            addButton(res.getImage("result.jpg"), p, false, 26, 32, res);
+            if (p.getUser_id() == SessionManager.getId())
+            { addButton(res.getImage("result.jpg"), p, false, 26, 32, res);}
 
         }
 //        addButton(res.getImage("news-item-2.jpg"), "Fusce ornare cursus masspretium tortor integer placera.", true, 15, 21);
@@ -309,7 +311,6 @@ public class ResultsForm extends BaseForm {
     }
     
     public void sharePost (String str){
-      //String textToShare="test\n text";
         Display.getInstance().execute("https://www.facebook.com/sharer/sharer.php"
                 + "?u="+Util.encodeUrl("http://127.0.0.1:8000")
                 + "&title=A+nice+question+about+Facebook"

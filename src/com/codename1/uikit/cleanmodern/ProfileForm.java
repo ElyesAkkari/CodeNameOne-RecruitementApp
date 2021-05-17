@@ -34,6 +34,7 @@ import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
+import com.mobilePIDEV.services.SessionManager;
 
 /**
  * The user profile form
@@ -80,15 +81,15 @@ public class ProfileForm extends BaseForm {
                 )
         ));
 
-        TextField username = new TextField("sandeep");
+        TextField username = new TextField(SessionManager.getUsername().toString());
         username.setUIID("TextFieldBlack");
         addStringValue("Username", username);
 
-        TextField email = new TextField("sandeep@gmail.com", "E-Mail", 20, TextField.EMAILADDR);
+        TextField email = new TextField(SessionManager.getEmail().toString(), "E-Mail", 20, TextField.EMAILADDR);
         email.setUIID("TextFieldBlack");
         addStringValue("E-Mail", email);
         
-        TextField password = new TextField("sandeep", "Password", 20, TextField.PASSWORD);
+        TextField password = new TextField(SessionManager.getPassowrd().toString(), "Password", 20, TextField.PASSWORD);
         password.setUIID("TextFieldBlack");
         addStringValue("Password", password);
 

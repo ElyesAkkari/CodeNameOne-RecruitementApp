@@ -96,6 +96,13 @@ public class ServiceParticipation {
                  p.setQuiz_id((int) Float.parseFloat(listq.get("id").toString()));
                 }
                 }
+                if (obj.get("user") != null){
+                Map<String, Object> listu = (Map<String, Object>) obj.get("user");
+                for (Object ob : listu.values())
+                {
+                    p.setUser_id((int) Float.parseFloat(listu.get("id").toString()));
+                }
+                }
                 //System.out.println(listq);
                 String sDate1 = obj.get("added").toString();
                 try {
@@ -130,11 +137,14 @@ public class ServiceParticipation {
                 p.setNote(((int) Float.parseFloat(obj.get("note").toString())));
                 if(obj.get("quiz") != null){
                 Map<String, Object> listq = (Map<String, Object>) obj.get("quiz");
+                    System.out.println(listq);
                 for (Object o : listq.values())
                 {
                  p.setQuiz(new Quiz((int) Float.parseFloat(listq.get("id").toString()), 0, listq.get("titre").toString(), listq.get("owner").toString()));
                  p.setQuiz_id((int) Float.parseFloat(listq.get("id").toString()));
                 }
+                
+                
                 }
                 //System.out.println(listq);
                 String sDate1 = obj.get("added").toString();
@@ -155,5 +165,23 @@ public class ServiceParticipation {
 
         }
         return participations;
+    }
+    
+    
+    public boolean addParticipation (Participation p){
+        String url = Statics.BASE_URL + "addParticipationJSON?user_id=" + p.getUser_id() 
+                                                        + "&quiz_id=" + p.getQuiz_id()
+                                                        + "&offre_id="+ p.getOffre_id()
+                                                        + "&note="+p.getNote();
+        req.setUrl(url);// Insertion de l'URL de notre demande de connexion
+        req.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                resultOK = req.getResponseCode() == 200; //Code HTTP 200 OK
+                req.removeResponseListener(this); 
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(req);
+        return resultOK;
     }
 }

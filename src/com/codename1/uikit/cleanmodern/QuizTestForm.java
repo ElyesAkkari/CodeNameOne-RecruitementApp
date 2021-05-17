@@ -6,6 +6,7 @@
 package com.codename1.uikit.cleanmodern;
 
 import com.codename1.components.ScaleImageLabel;
+import com.codename1.components.ToastBar;
 import com.codename1.ui.Button;
 import com.codename1.ui.ButtonGroup;
 import com.codename1.ui.CheckBox;
@@ -15,6 +16,7 @@ import static com.codename1.ui.Component.CENTER;
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
 import com.codename1.ui.Font;
+import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.Image;
@@ -29,10 +31,13 @@ import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
 import com.mobilePIDEV.entites.Answer;
+import com.mobilePIDEV.entites.Participation;
 import com.mobilePIDEV.entites.Question;
 import com.mobilePIDEV.entites.Quiz;
+import com.mobilePIDEV.services.ServiceParticipation;
 import com.mobilePIDEV.services.ServiceQuestion;
 import com.mobilePIDEV.services.ServiceReponse;
+import com.mobilePIDEV.services.SessionManager;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -46,7 +51,11 @@ import javafx.animation.Timeline;
  * @author DELL
  */
 public class QuizTestForm extends BaseForm {
-
+    Quiz quiz;
+    Resources r;
+    public void setQuiz(Quiz q){
+        this.quiz=q;
+    }
     Date currentTime = new Date();
     private Resources theme;
     private Font numbersFont;
@@ -62,8 +71,10 @@ public class QuizTestForm extends BaseForm {
     HashMap<Answer, CheckBox> radioMap = new HashMap<>();
 
     public QuizTestForm(Resources res, Quiz q) {
+        
         super("ResultsForm", BoxLayout.y());
-
+        setQuiz(q);
+        r=res;
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
@@ -86,7 +97,7 @@ public class QuizTestForm extends BaseForm {
         ScaleImageLabel sl = new ScaleImageLabel(im1);
         sl.setUIID("BottomPad");
         sl.setBackgroundType(Style.BACKGROUND_IMAGE_SCALED_FILL);
-        addTab(swipe, im1, spacer3/*, "100 Likes  ", "66 Comments", "Dogs are cute: story at 11"*/);
+        addTab(swipe, im1, spacer3);
 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -174,6 +185,7 @@ public class QuizTestForm extends BaseForm {
         });
         submit.addActionListener(l -> {submit();
         deregisterAnimated(this);
+        
         });
         add(container);
         //add(container);
@@ -246,6 +258,14 @@ public class QuizTestForm extends BaseForm {
         }
         note = ((note / tot) * 100);
         System.out.println(note);
+        Participation p = new Participation();
+        p.setOffre_id(4);
+        p.setQuiz_id(quiz.getId());
+        p.setUser_id(SessionManager.getId());
+        p.setNote(note);
+        ServiceParticipation.getInstance().addParticipation(p);
+        ToastBar.showMessage("Your participation has been added successfully !", FontImage.MATERIAL_INFO);
+        new ResultsForm(r).show();
     }
 
     @Override

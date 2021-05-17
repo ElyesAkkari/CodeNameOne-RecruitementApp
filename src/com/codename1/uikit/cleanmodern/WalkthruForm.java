@@ -35,6 +35,7 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.util.Resources;
+import javax.mail.MessagingException;
 
 /**
  * Swiping thru tutorial
@@ -108,7 +109,13 @@ public class WalkthruForm extends Form {
         
         Button skip = new Button("Skip");
         skip.setUIID("SkipButton");
-        skip.addActionListener(e -> new SignInForm(res).show());
+        skip.addActionListener(e -> {
+            try {
+                new SignInForm(res).show();
+            } catch (MessagingException ex) {
+                System.out.println(ex);
+            }
+        });
         
         Container welcomeNoteArea = BoxLayout.encloseY(message,
                 LayeredLayout.encloseIn(
