@@ -128,6 +128,7 @@ public class NewsfeedForm extends BaseForm {
         ));
         
         all.setSelected(true);
+        featured.addActionListener(l->new EventForm(res).show());
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
