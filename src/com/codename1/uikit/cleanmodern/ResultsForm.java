@@ -88,7 +88,6 @@ public class ResultsForm extends BaseForm {
         Image im1 = res.getImage("d.png").scaled(250, 250);
         Image im2 = res.getImage("b.png").scaled(250, 250);
 
-        System.out.println("height : " + res.getImage("dog.jpg").getHeight());
         addTab(swipe, im2, spacer2/*, "", "", ""*/);
         addTab(swipe, im1, spacer3/*, "100 Likes  ", "66 Comments", "Dogs are cute: story at 11"*/);
 

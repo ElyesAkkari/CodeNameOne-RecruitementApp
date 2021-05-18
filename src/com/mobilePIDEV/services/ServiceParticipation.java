@@ -137,7 +137,7 @@ public class ServiceParticipation {
                 p.setNote(((int) Float.parseFloat(obj.get("note").toString())));
                 if(obj.get("quiz") != null){
                 Map<String, Object> listq = (Map<String, Object>) obj.get("quiz");
-                    System.out.println(listq);
+                    
                 for (Object o : listq.values())
                 {
                  p.setQuiz(new Quiz((int) Float.parseFloat(listq.get("id").toString()), 0, listq.get("titre").toString(), listq.get("owner").toString()));
