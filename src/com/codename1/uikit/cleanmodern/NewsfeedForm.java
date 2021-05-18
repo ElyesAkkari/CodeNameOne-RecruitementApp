@@ -20,7 +20,6 @@
 package com.codename1.uikit.cleanmodern;
 
 import com.codename1.components.ScaleImageLabel;
-import com.codename1.components.SpanLabel;
 import com.codename1.components.ToastBar;
 import com.codename1.ui.Button;
 import com.codename1.ui.ButtonGroup;
@@ -128,6 +127,7 @@ public class NewsfeedForm extends BaseForm {
         ));
         
         all.setSelected(true);
+        featured.addActionListener(l->new EventForm(res).show());
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
@@ -135,6 +135,9 @@ public class NewsfeedForm extends BaseForm {
         });
         myFavorite.addActionListener(l->
         new ResultsForm(res).show()
+        );
+        featured.addActionListener(l->
+        new EventForm(res).show()
         );
         bindButtonSelection(all, arrow);
         bindButtonSelection(featured, arrow);

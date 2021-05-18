@@ -51,10 +51,13 @@ import javafx.animation.Timeline;
  * @author DELL
  */
 public class QuizTestForm extends BaseForm {
+
     Quiz quiz;
     Resources r;
-    public void setQuiz(Quiz q){
-        this.quiz=q;
+    Container blY = new Container(BoxLayout.y());
+
+    public void setQuiz(Quiz q) {
+        this.quiz = q;
     }
     Date currentTime = new Date();
     private Resources theme;
@@ -71,10 +74,10 @@ public class QuizTestForm extends BaseForm {
     HashMap<Answer, CheckBox> radioMap = new HashMap<>();
 
     public QuizTestForm(Resources res, Quiz q) {
-        
+
         super("ResultsForm", BoxLayout.y());
         setQuiz(q);
-        r=res;
+        r = res;
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
@@ -142,7 +145,7 @@ public class QuizTestForm extends BaseForm {
         ---------------------------------------------*/
 
         Container container = new Container(BoxLayout.y());
-        Container blY = new Container(BoxLayout.y());
+        
 //        blY.add(timer);
 
         ArrayList<Question> questions = ServiceQuestion.getInstance().getAllQuestions();
@@ -171,6 +174,7 @@ public class QuizTestForm extends BaseForm {
         }
         Button submit = new Button("submit");
         blY.add(submit);
+        blY.add(new Label("___"));
         blY.setVisible(false);
         container.addAll(getQuiz, blY);
         getQuiz.addActionListener(l -> {
@@ -178,21 +182,20 @@ public class QuizTestForm extends BaseForm {
             getQuiz.getAllStyles().setBgTransparency(255);
             getQuiz.getStyle().setBgColor(0xff2d55);
             System.out.println("click get quiz");
-            getQuiz(q);
+            //getQuiz(q);
             blY.setVisible(true);
             registerAnimated(this);
 
         });
-        submit.addActionListener(l -> {submit();
-        deregisterAnimated(this);
-        
+        submit.addActionListener(l -> {
+            submit();
         });
         add(container);
         //add(container);
 
     }
 
-    public void getQuiz(Quiz q) {
+   /* public void getQuiz(Quiz q) {
         System.out.println("processed");
         //getQuiz.setVisible(false);
         Button cntdown = new Button("countDown");
@@ -215,11 +218,11 @@ public class QuizTestForm extends BaseForm {
                 }
             }
         }
-
-        Button submit = new Button("submit");
-        blY.add(submit);
+//
+//        Button submit = new Button("submit");
+//        blY.add(submit);
         add(blY);
-    }
+    }*/
 
     private void addTab(Tabs swipe, Image img, Label spacer) {
 
@@ -244,6 +247,8 @@ public class QuizTestForm extends BaseForm {
 
     public void submit() {
         double note = 0;
+        deregisterAnimated(this);
+        blY.setVisible(false);
         for (Map.Entry<Answer, CheckBox> entry : radioMap.entrySet()) {
             if (entry.getValue().isSelected()) {
                 if (entry.getKey().isValid()) {
@@ -264,6 +269,7 @@ public class QuizTestForm extends BaseForm {
         p.setUser_id(SessionManager.getId());
         p.setNote(note);
         ServiceParticipation.getInstance().addParticipation(p);
+        //removeAll();
         ToastBar.showMessage("Your participation has been added successfully !", FontImage.MATERIAL_INFO);
         new ResultsForm(r).show();
     }
@@ -287,6 +293,5 @@ public class QuizTestForm extends BaseForm {
         return false;
 
     }
-
 
 }

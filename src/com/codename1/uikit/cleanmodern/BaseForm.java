@@ -92,7 +92,7 @@ public class BaseForm extends Form {
         tb.addMaterialCommandToSideMenu("Profile", FontImage.MATERIAL_SETTINGS, e -> new ProfileForm(res).show());
         tb.addMaterialCommandToSideMenu("test quiz", FontImage.MATERIAL_SETTINGS, e -> new QuizTestForm(res, q).show());
         
-        if (SessionManager.getRole().toLowerCase().equals("admin")) {
+        if (!SessionManager.getRole().toLowerCase().equals("candidat")) {
             tb.addMaterialCommandToSideMenu("Results", FontImage.MATERIAL_PIE_CHART, e -> new ResultStatForm(res).show());
             tb.addMaterialCommandToSideMenu("Type Entretien", FontImage.MATERIAL_LIST, e -> new NewsfeedForm(res).show());
             tb.addMaterialCommandToSideMenu("Quiz Managment", FontImage.MATERIAL_QUESTION_ANSWER, e -> new QuizForm(res).show());

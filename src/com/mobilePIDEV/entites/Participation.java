@@ -122,7 +122,6 @@ public class Participation {
     public String toString() {
         return "Participation{" + "id=" + id + ", user_id=" + user_id + ", quiz_id=" + quiz_id + ", note=" + note + ", added=" + added + ", archive=" + archive + ", offre_id=" + offre_id + '}';
     }
+}  
     
-    
-    
-}
+
