@@ -1,81 +1,91 @@
 /*
- * Copyright (c) 2016, Codename One
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
- * documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
- * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, 
- * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions 
- * of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
- * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
- * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package com.codename1.uikit.cleanmodern;
 
+import com.codename1.components.FloatingActionButton;
 import com.codename1.components.ScaleImageLabel;
-import com.codename1.components.ShareButton;
-import com.codename1.components.SpanLabel;
 import com.codename1.components.ToastBar;
-import com.codename1.io.FileSystemStorage;
-import com.codename1.io.Log;
-import com.codename1.io.Util;
-import com.codename1.share.EmailShare;
-import com.codename1.share.ShareService;
+import com.codename1.l10n.SimpleDateFormat;
 import com.codename1.ui.Button;
 import com.codename1.ui.ButtonGroup;
+import static com.codename1.ui.CN.share;
 import com.codename1.ui.Component;
+import static com.codename1.ui.Component.BOTTOM;
+import static com.codename1.ui.Component.CENTER;
+import static com.codename1.ui.Component.LEFT;
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
+import com.codename1.ui.EncodedImage;
+import com.codename1.ui.Font;
 import com.codename1.ui.FontImage;
+import com.codename1.ui.Form;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
-import com.codename1.ui.List;
 import com.codename1.ui.RadioButton;
 import com.codename1.ui.Tabs;
 import com.codename1.ui.TextArea;
+import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
+import com.codename1.ui.URLImage;
+import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
-import com.codename1.ui.util.ImageIO;
 import com.codename1.ui.util.Resources;
 import com.mobilePIDEV.entites.Participation;
+import com.mobilePIDEV.entites.Quiz;
+import com.mobilePIDEV.entites.commentaire;
+import com.mobilePIDEV.entites.offre;
 import com.mobilePIDEV.services.ServiceParticipation;
+import com.mobilePIDEV.services.ServiceQuiz;
 import com.mobilePIDEV.services.SessionManager;
-import java.io.IOException;
-import java.io.OutputStream;
+import com.mobilePIDEV.services.servicecomment;
+import com.mobilePIDEV.services.serviceoffre;
+
 import java.util.ArrayList;
-import java.util.Date;
-//import java.util.concurrent.TimeUnit;
+//import com.mycompany.myapp.utils.share;
 
 /**
- * The newsfeed form
  *
- * @author Shai Almog
+ * @author malek
  */
-public class ResultsForm extends BaseForm {
+public class Detailoffre extends BaseForm {
 
-    ArrayList<Participation> participation;
+    BaseForm current;
+    Quiz q = new Quiz();
+    private static int id;
+    //Resources res;
+    //servicecomment cmt1;
 
-    public ResultsForm(Resources res) {
-        super("ResultsForm", BoxLayout.y());
+    public Detailoffre(int id, Resources res) {
+
+        super("Newsfeed", BoxLayout.y());
+        this.id = id;
+        servicecomment cmt = new servicecomment();
+        ArrayList<commentaire> listcomment = new ArrayList<>();
+        //listcomment = es.getAllComments(id);
+        listcomment = cmt.getAllComments(id);
+
+        serviceoffre es = new serviceoffre();
+        offre o = es.affichoffre(id);
+        Container c1 = new Container(BoxLayout.y());
+        Image imgUrl;
+
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
         setTitle("Newsfeed");
         getContentPane().setScrollVisible(false);
-
+        System.out.println(o.getId());
         super.addSideMenu(res);
         tb.addSearchCommand(e -> {
         });
@@ -88,6 +98,7 @@ public class ResultsForm extends BaseForm {
         Image im1 = res.getImage("d.png").scaled(250, 250);
         Image im2 = res.getImage("b.png").scaled(250, 250);
 
+        System.out.println("height : " + res.getImage("dog.jpg").getHeight());
         addTab(swipe, im2, spacer2/*, "", "", ""*/);
         addTab(swipe, im1, spacer3/*, "100 Likes  ", "66 Comments", "Dogs are cute: story at 11"*/);
 
@@ -139,23 +150,25 @@ public class ResultsForm extends BaseForm {
         RadioButton myFavorite = RadioButton.createToggle("Results", barGroup);
         myFavorite.setUIID("SelectBar");
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
-
+        all.addActionListener(e -> {
+            new afficheroffre(res).show();
+        });
+        myFavorite.addActionListener(l
+                -> new ResultsForm(res).show()
+        );
+        featured.addActionListener(l
+                -> new EventForm(res).show()
+        );
         add(LayeredLayout.encloseIn(
                 GridLayout.encloseIn(4, all, featured, popular, myFavorite),
                 FlowLayout.encloseBottom(arrow)
         ));
-        all.addActionListener(e -> {
-            new afficheroffre(res).show();
-        });
-        featured.addActionListener(l
-                -> new EventForm(res).show()
-        );
 
-        myFavorite.setSelected(true);
+        all.setSelected(true);
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
-            updateArrowPosition(myFavorite, arrow);
+            updateArrowPosition(all, arrow);
         });
         bindButtonSelection(all, arrow);
         bindButtonSelection(featured, arrow);
@@ -166,16 +179,60 @@ public class ResultsForm extends BaseForm {
         addOrientationListener(e -> {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
-        participation = ServiceParticipation.getInstance().getAllParts();
-        for (Participation p : participation) {
-            if (p.getUser_id() == SessionManager.getId())
-            { addButton(res.getImage("result.jpg"), p, false, 26, 32, res);}
+
+        //travaille de la details offre :
+        Label Nomsociete = new Label(o.getNoms());
+        Nomsociete.getAllStyles().setFont(Font.createSystemFont(Font.FACE_SYSTEM, Font.STYLE_BOLD, Font.SIZE_LARGE));
+        Nomsociete.setTextPosition(TOP);
+        Label departement = new Label("apartien au departement  : " + o.getDepartement());
+        Label type = new Label("c'est un : " + o.getType());
+        //Label Nbparticipents  = new Label("Nombre des participants :  " +Integer.toString(e.getNbparticipent()));
+        TextArea description = new TextArea(o.getDescription());
+        description.getAllStyles().setFgColor(0x14024F);
+        //description.getAllStyles(CENTER);
+        description.setMaxSize(2147483647);
+        description.setEditable(false);
+        Image placeholder = Image.createImage(500, 120);
+        EncodedImage encImage = EncodedImage.createFromImage(placeholder, false);
+
+        imgUrl = URLImage.createToStorage(encImage, "file:/C:/Users/DELL/Desktop/WebPIDEV/public/assets/images/properties/" + o.getImage_name(), "file:/C:/Users/malek/WebPIDEV/public/assets/images/properties/" + o.getImage_name()).scaled(1200, 600);
+        add(Nomsociete);
+        add(imgUrl);
+        addAll(description, departement, type);
+        if (SessionManager.getRole().toLowerCase().equals("candidat")) {
+
+            ArrayList<Quiz> quiz = ServiceQuiz.getInstance().getAllQuizs();
+            int i = 0;
+            boolean exist = false;
+            Button btnajout = new Button("Postuler");
+            do {
+                if (quiz.get(i).getTitre().toLowerCase().equals(o.getDepartement().toLowerCase())) {
+                    q = quiz.get(i);
+                    exist = true;
+                    btnajout.addActionListener(e -> new QuizTestForm(res, q).show());
+                }
+                i++;
+            } while ((exist == false) && (i < quiz.size()));
+            if (!exist) {
+                Participation p = new Participation();
+                p.setOffre_id(o.getId());
+                p.setUser_id(SessionManager.getId());
+                p.setNote(-1);
+                btnajout.addActionListener(e -> {
+                    ServiceParticipation.getInstance().addParticipation(p);
+                    ToastBar.showMessage("Your participation has been added successfully !", FontImage.MATERIAL_INFO);
+                    btnajout.remove();
+                });
+
+            }
+            add(btnajout);
+        }
+        for (commentaire cm : listcomment) {
+
+            addButton(cm.getUsername(), cm.getMessage(), res);
 
         }
-//        addButton(res.getImage("news-item-2.jpg"), "Fusce ornare cursus masspretium tortor integer placera.", true, 15, 21);
-//        addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15);
-//        addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);
-//    
+
     }
 
     private void updateArrowPosition(Button b, Label arrow) {
@@ -196,7 +253,7 @@ public class ResultsForm extends BaseForm {
 //        likes.setIcon(heartImage);
 //        likes.setTextPosition(RIGHT);
 
-//        Label comments = new Label(commentsStr);
+//       Label comments = new Label(commentsStr);
 //        FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
         if (img.getHeight() > Display.getInstance().getDisplayHeight() / 2) {
             img = img.scaledHeight(Display.getInstance().getDisplayHeight() / 2);
@@ -222,91 +279,6 @@ public class ResultsForm extends BaseForm {
         swipe.addTab("", page1);
     }
 
-    private void addButton(Image img, Participation p, boolean liked, int likeCount, int commentCount, Resources res) {
-        int height = Display.getInstance().convertToPixels(11.5f);
-        int width = Display.getInstance().convertToPixels(14f);
-        Date date = new Date();
-        //----- days count
-        int days = (int) (Math.abs(date.getTime() - p.getAdded().getTime()) / (1000 * 60 * 60 * 24));
-        //!---
-        Button image = new Button(img.fill(width, height));
-        image.setUIID("Label");
-        Container cnt = BorderLayout.west(image);
-        cnt.setLeadComponent(image);
-        String title;
-        if (p.getQuiz() != null) {
-            title = "Quiz : " + p.getQuiz().getTitre()
-                    + "\n Note : " + p.getNote()
-                    + "\n" + days + " days ago.";
-            TextArea ta = new TextArea(title);
-        } else {
-            title = "Note : " + p.getNote()
-                    + "\n" + days + " days ago.";
-        }
-        TextArea ta = new TextArea(title);
-        ta.setUIID("NewsTopLine");
-        ta.setEditable(false);
-
-        Label likes = new Label(likeCount + " Likes  ", "NewsBottomLine");
-        likes.setTextPosition(RIGHT);
-        if (!liked) {
-            FontImage.setMaterialIcon(likes, FontImage.MATERIAL_FAVORITE);
-        } else {
-            Style s = new Style(likes.getUnselectedStyle());
-            s.setFgColor(0xff2d55);
-            FontImage heartImage = FontImage.createMaterial(FontImage.MATERIAL_FAVORITE, s);
-            likes.setIcon(heartImage);
-        }
-        Label comments = new Label(commentCount + " Comments", "NewsBottomLine");
-        FontImage.setMaterialIcon(likes, FontImage.MATERIAL_CHAT);
-
-        cnt.add(BorderLayout.CENTER,
-                BoxLayout.encloseY(
-                        ta,
-                        BoxLayout.encloseX(likes, comments)
-                ));
-        add(cnt);
-        image.addActionListener(e -> {
-            Dialog dlg = new Dialog();
-            ShareButton sb = new ShareButton();
-            sb.setText("Share Result");
-
-            Image screenshot = Image.createImage(getWidth(), getHeight());
-            revalidate();
-            setVisible(true);
-            paintComponent(screenshot.getGraphics(), true);
-
-            String imageFile = FileSystemStorage.getInstance().getAppHomePath() + "screenshot.png";
-            try (OutputStream os = FileSystemStorage.getInstance().openOutputStream(imageFile)) {
-                ImageIO.getImageIO().save(screenshot, os, ImageIO.FORMAT_PNG, 1);
-            } catch (IOException err) {
-                Log.e(err);
-            }
-            Image fb_logo = res.getImage("fb.png");
-            fb_logo = fb_logo.scaledHeight(85);
-            ShareService fb = new ShareService("custom Facebook", fb_logo) {
-                @Override
-                public void share(String text) {
-                    sharePost(title);
-                }
-                @Override
-                public boolean canShareImage() {
-                    return true;
-                }
-            };
-            //sb.setImageToShare(imageFile, "image/png");
-            sb.setTextToShare(title);
-            sb.addShareService(fb);
-            dlg.add(sb);
-            Display.getInstance().createContact("Elyes", "Akkari", "+21656782825", "70112233", "+21656782825", "elyesakkari0@gmail.com");
-            int h = Display.getInstance().getDisplayHeight();
-            dlg.setDisposeWhenPointerOutOfBounds(true);
-            dlg.show(h / 8 * 7, 0, 0, 0);
-        });
-    }
-
-  
-
     private void bindButtonSelection(Button b, Label arrow) {
         b.addActionListener(e -> {
             if (b.isSelected()) {
@@ -314,13 +286,38 @@ public class ResultsForm extends BaseForm {
             }
         });
     }
-    
-    public void sharePost (String str){
-        Display.getInstance().execute("https://www.facebook.com/sharer/sharer.php"
-                + "?u="+Util.encodeUrl("http://127.0.0.1:8000")
-                + "&title=A+nice+question+about+Facebook"
-                +"&p[images][0]="+Util.encodeUrl("https://upload.wikimedia.org/wikipedia/commons/b/b6/Logo_ESPRIT_-_Tunisie.png")
-                + "&quote="+Util.encodeUrl("I've passed a Quiz with IMPACTEERS! \n"+str)
-                + "&description=Apparently%2C+the+accepted+answer+is+not+correct.");
+
+    private void addStringValue(String s, Component v) {
+        add(BorderLayout.west(new Label(s, "paddedLabel"))
+                .add(BorderLayout.CENTER, v)
+        );
+
+        add(createLineSeparator(0xeeeeee));
     }
+
+    private void addButton(String title, String type, Resources r) {
+
+        Button image = new Button();
+
+        Container cnt = BorderLayout.west(image);
+
+        TextArea ta = new TextArea(title);
+        ta.setUIID("News");
+        ta.setEditable(false);
+
+        Label likes = new Label(type + "  ", "NewsTopLine");
+        likes.setTextPosition(RIGHT);
+        cnt.add(BorderLayout.CENTER,
+                BoxLayout.encloseY(
+                        ta,
+                        BoxLayout.encloseXCenter(likes)
+                ));
+        add(cnt);
+
+    }
+
+    public Form getF() {
+        return current;
+    }
+
 }

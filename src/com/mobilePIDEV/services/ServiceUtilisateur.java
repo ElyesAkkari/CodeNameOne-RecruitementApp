@@ -17,6 +17,7 @@ import com.codename1.ui.Dialog;
 import com.codename1.ui.TextField;
 import com.codename1.ui.util.Resources;
 import com.codename1.uikit.cleanmodern.NewsfeedForm;
+import com.codename1.uikit.cleanmodern.afficheroffre;
 import com.mobilePIDEV.entites.Utilisateur;
 import com.mobilePIDEV.utils.Statics;
 import java.util.ArrayList;
@@ -159,7 +160,8 @@ public class ServiceUtilisateur {
                     }
                     System.out.println("current user ====>"+SessionManager.getEmail()+" ,"+SessionManager.getUsername()+" ,"+SessionManager.getPassowrd()+"."+SessionManager.getRole());
                     if(user.size() > 0){
-                        new NewsfeedForm(rs).show();
+                        //new NewsfeedForm(rs).show();
+                        new afficheroffre(rs).show();
                     }
                 }
             }catch(Exception ex){

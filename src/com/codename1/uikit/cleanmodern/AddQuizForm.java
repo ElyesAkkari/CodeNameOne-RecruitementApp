@@ -52,6 +52,7 @@ import com.mobilePIDEV.entites.Participation;
 import com.mobilePIDEV.entites.Quiz;
 import com.mobilePIDEV.services.ServiceParticipation;
 import com.mobilePIDEV.services.ServiceQuiz;
+import com.mobilePIDEV.services.SessionManager;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -164,6 +165,8 @@ public class AddQuizForm extends BaseForm {
         titre.setUIID("TextFieldBlack");
         addStringValue("Titre", titre);
         TextField owner = new TextField("", "Created By :");
+        owner.setText(SessionManager.getEmail());
+        owner.setEditable(false);
         owner.setUIID("TextFieldBlack");
         addStringValue("Created by ", owner);
         Button addQuiz = new Button("add quiz");
