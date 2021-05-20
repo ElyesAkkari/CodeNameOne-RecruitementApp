@@ -61,9 +61,9 @@ import com.codename1.ui.plaf.Border;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
-import com.mobilePIDEV.entites.commentaire;
+import com.mobilePIDEV.entites.commantaire;
 import com.mobilePIDEV.entites.formation;
-import com.mobilePIDEV.services.servicecommentaire;
+import com.mobilePIDEV.services.servicecommantaire;
 import com.mobilePIDEV.services.serviceformation;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -77,7 +77,7 @@ public class afficheformation extends BaseForm {
 
     
     ArrayList<formation> formations;
-     public static ArrayList<commentaire> listeC;
+     public static ArrayList<commantaire> listeC;
      static int priceminA ;
               static      int  pricemaxA;
               static        boolean  enventeA= true;
@@ -341,7 +341,7 @@ static String  rechercher;
         addformatio.addActionListener(l -> {
                                     String comment12 = ac.getText();
 
-             commentaire c = new    commentaire(q.getId(),comment12);
+             commantaire c = new    commantaire(q.getId(),comment12);
          if(   serviceformation.getInstance().addCommentaire(c, q.getId()))
             Dialog.show("Success","commentaire ajouté",new Command("OK"));
           else
@@ -375,11 +375,11 @@ static String  rechercher;
         });
     }
     private  void affichecomm(formation q){
-        listeC=servicecommentaire.getInstance().getAllCommentsAction(q.getId());
+        listeC=servicecommantaire.getInstance().getAllCommentsAction(q.getId());
  Style s3=getAllStyles();
    Container listss = new Container(BoxLayout.y());
         Container lists = new Container(BoxLayout.y());
-           for(commentaire comm : listeC) {
+           for(commantaire comm : listeC) {
             listss.add(createCoursContainer(comm));
         }
       /*************************/
@@ -392,7 +392,7 @@ static String  rechercher;
         t.addTab("Comments", listss);
         t.setScrollableY(true);
     }
-    private Container createCoursContainer(commentaire commentaires) {
+    private Container createCoursContainer(commantaire commentaires) {
            
             Button bt=new Button("Like");
             Style butStylebn=bt.getAllStyles();

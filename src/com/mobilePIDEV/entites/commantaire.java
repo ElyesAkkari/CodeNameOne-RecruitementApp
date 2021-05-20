@@ -9,7 +9,7 @@ package com.mobilePIDEV.entites;
  *
  * @author 21628
  */
-public class commentaire {
+public class commantaire {
       int id, idformation_id;
     String body;
 
@@ -37,13 +37,13 @@ public class commentaire {
         this.body = body;
     }
 
-    public commentaire(int id, int idformation_id, String body) {
+    public commantaire(int id, int idformation_id, String body) {
         this.id = id;
         this.idformation_id = idformation_id;
         this.body = body;
     }
 
-    public commentaire(int idformation_id, String body) {
+    public commantaire(int idformation_id, String body) {
         this.idformation_id = idformation_id;
         this.body = body;
     }
@@ -53,7 +53,7 @@ public class commentaire {
         return "commentaire{" + "id=" + id + ", idformation_id=" + idformation_id + ", body=" + body + '}';
     }
 
-    public commentaire() {
+    public commantaire() {
     }
     
 }

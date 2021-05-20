@@ -11,7 +11,7 @@ import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.events.ActionListener;
-import com.mobilePIDEV.entites.commentaire;
+import com.mobilePIDEV.entites.commantaire;
 import com.mobilePIDEV.utils.Statics;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,23 +22,23 @@ import java.util.Map;
  *
  * @author 21628
  */
-public class servicecommentaire {
+public class servicecommantaire {
         public boolean resultOK;
-    public ArrayList<commentaire> commentaires ;
+    public ArrayList<commantaire> commentaires ;
   
-        public static servicecommentaire instance=null;
+        public static servicecommantaire instance=null;
         
-        public servicecommentaire() {
+        public servicecommantaire() {
     }
         
-            public static servicecommentaire getInstance() {
+            public static servicecommantaire getInstance() {
         if (instance == null) {
-            instance = new servicecommentaire();
+            instance = new servicecommantaire();
         }
         return instance;
     }
                 //ADD : Insert
-     public boolean addCommentaire(commentaire c,int idformation_id){
+     public boolean addCommentaire(commantaire c,int idformation_id){
          String url = Statics.BASE_URL+"addComment"+ "?id="+idformation_id+"body="+c.getBody();
                  ConnectionRequest req1 = new ConnectionRequest(url);
                  req1.setPost(false);
@@ -51,7 +51,7 @@ public class servicecommentaire {
          return resultOK;
      }
           //Parsing     
-    public ArrayList<commentaire> parseJsonAction(String jsonText){
+    public ArrayList<commantaire> parseJsonAction(String jsonText){
         try {
             commentaires=new ArrayList<>();
             JSONParser j = new JSONParser();// Instanciation d'un objet JSONParser permettant le parsing du résultat json
@@ -64,7 +64,7 @@ public class servicecommentaire {
             for(Map<String,Object> obj : list){
                 //Création des tâches et récupération de leurs données
           
-          commentaire c = new commentaire();
+          commantaire c = new commantaire();
                 float id = Float.parseFloat(obj.get("id").toString());
                 c.setId((int)id);
                 c.setBody(obj.get("contenu").toString());
@@ -83,7 +83,7 @@ public class servicecommentaire {
     
     
     
-    public ArrayList<commentaire> getAllCommentsAction(int idformation_id){
+    public ArrayList<commantaire> getAllCommentsAction(int idformation_id){
    //      ArrayList<Product> result = new  ArrayList<> ;
         String url = Statics.BASE_URL+"displayComments"+"?id="+idformation_id;
         ConnectionRequest req = new ConnectionRequest(url);

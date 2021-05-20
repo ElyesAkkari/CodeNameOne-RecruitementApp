@@ -11,7 +11,7 @@ import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.events.ActionListener;
-import com.mobilePIDEV.entites.commentaire;
+import com.mobilePIDEV.entites.commantaire;
 import com.mobilePIDEV.entites.formateur;
 import com.mobilePIDEV.entites.formation;
 import com.mobilePIDEV.entites.participer;
@@ -185,7 +185,7 @@ public class serviceformation {
         NetworkManager.getInstance().addToQueueAndWait(req);
         return resultOK;
     }
-         public boolean addCommentaire(commentaire c,int id){
+         public boolean addCommentaire(commantaire c,int id){
          String url = Statics.BASE_URL+"addComment?id="+id+"&body="+c.getBody();
                  ConnectionRequest req1 = new ConnectionRequest(url);
                  req1.setPost(false);
