@@ -21,6 +21,10 @@ public class SessionManager {
     // hethom données ta3 user lyt7b tsajlhom fi session  ba3d login 
     private static int id ; 
     private static String username; 
+   private static String prenom; 
+      private static int cin; 
+      private static int numtel; 
+
     private static String email; 
     private static String passowrd;
     private static String photo;
@@ -48,6 +52,13 @@ public class SessionManager {
     public static void setUsername(String username) {
          pref.set("username",username);
     }
+     public static String getPrenom() {
+        return pref.get("prenom",prenom);
+    }
+
+    public static void setPrenom(String prenom) {
+         pref.set("prenom",prenom);
+    }
 
     public static String getEmail() {
         return pref.get("email",email);
@@ -73,6 +84,23 @@ public class SessionManager {
          pref.set("photo",photo);
     }
     
+        public static int getCin() {
+        return pref.get("cin",cin);
+    }
+
+    public static void setCin(int cin) {
+         pref.set("cin",cin);
+    }
+    
+            public static int getNum() {
+        return pref.get("numtel",numtel);
+    }
+
+    public static void setNum(int numtel) {
+         pref.set("numtel",numtel);
+    }
+
+
     
     
 }

@@ -4,8 +4,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/Ahmed/www/MobilePidev/src/com/mobilePIDEV/services/ServiceUtilisateur.java</file>
-            <file>file:/Users/Ahmed/www/MobilePidev/src/com/codename1/uikit/cleanmodern/SignInForm.java</file>
+            <file>file:/Users/Ahmed/www/MobilePidev/src/com/mobilePIDEV/MyApplication.java</file>
+            <file>file:/Users/Ahmed/www/MobilePidev/src/com/codename1/uikit/cleanmodern/ClockForm.java</file>
+            <file>file:/Users/Ahmed/www/MobilePidev/src/com/codename1/uikit/cleanmodern/CameraForm.java</file>
         </group>
     </open-files>
 </project-private>

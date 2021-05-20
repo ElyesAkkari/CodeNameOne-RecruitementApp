@@ -20,6 +20,7 @@
 package com.codename1.uikit.cleanmodern;
 
 import com.codename1.components.ScaleImageLabel;
+import com.codename1.io.Storage;
 import com.codename1.ui.Component;
 import com.codename1.ui.Display;
 import com.codename1.ui.FontImage;
@@ -32,6 +33,8 @@ import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.layouts.Layout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
+import com.mobilePIDEV.services.SessionManager;
+import javax.mail.MessagingException;
 
 /**
  * Base class for the forms with common functionality
@@ -86,6 +89,16 @@ public class BaseForm extends Form {
         tb.addMaterialCommandToSideMenu("Entretien", FontImage.MATERIAL_LIST, e -> new NewsfeedForm(res).show());
         tb.addMaterialCommandToSideMenu("Type Entretien", FontImage.MATERIAL_LIST, e -> new NewsfeedForm(res).show());
         tb.addMaterialCommandToSideMenu("Profile", FontImage.MATERIAL_SETTINGS, e -> new ProfileForm(res).show());
-        tb.addMaterialCommandToSideMenu("Logout", FontImage.MATERIAL_EXIT_TO_APP, e -> new WalkthruForm(res).show());
+        tb.addMaterialCommandToSideMenu("Logout", FontImage.MATERIAL_EXIT_TO_APP,e ->{
+            try {
+                new SignInForm(res).show();
+                SessionManager.pref.clearAll();
+                Storage.getInstance().clearStorage();
+                Storage.getInstance().clearCache();
+                System.out.println(SessionManager.getEmail());
+            } catch (MessagingException ex) {
+                System.out.println(ex);
+            }
+        });
     }
 }
