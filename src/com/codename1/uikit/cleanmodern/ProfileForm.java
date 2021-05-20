@@ -19,22 +19,34 @@
 
 package com.codename1.uikit.cleanmodern;
 
+import com.codename1.capture.Capture;
+import com.codename1.components.ImageViewer;
 import com.codename1.components.ScaleImageLabel;
-import com.codename1.ui.CheckBox;
+import com.codename1.components.ToastBar;
+import com.codename1.ui.Button;
 import com.codename1.ui.Component;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
+import com.codename1.ui.FontImage;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
+import com.codename1.ui.TextArea;
 import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
+import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
+import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
+import com.mobilePIDEV.services.ServiceUtilisateur;
 import com.mobilePIDEV.services.SessionManager;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * The user profile form
@@ -64,44 +76,114 @@ public class ProfileForm extends BaseForm {
         sl.setUIID("BottomPad");
         sl.setBackgroundType(Style.BACKGROUND_IMAGE_SCALED_FILL);
 
-        Label facebook = new Label("786 followers", res.getImage("facebook-logo.png"), "BottomPad");
-        Label twitter = new Label("486 followers", res.getImage("twitter-logo.png"), "BottomPad");
-        facebook.setTextPosition(BOTTOM);
-        twitter.setTextPosition(BOTTOM);
+     //   Label facebook = new Label("786 followers", res.getImage("facebook-logo.png"), "BottomPad");
+     //   Label twitter = new Label("486 followers", res.getImage("twitter-logo.png"), "BottomPad");
+     //   facebook.setTextPosition(BOTTOM);
+     //   twitter.setTextPosition(BOTTOM);
+
         
         add(LayeredLayout.encloseIn(
                 sl,
                 BorderLayout.south(
                     GridLayout.encloseIn(3, 
-                            facebook,
                             FlowLayout.encloseCenter(
-                                new Label(res.getImage("profile-pic.jpg"), "PictureWhiteBackgrond")),
-                            twitter
+                                new Label(res.getImage("profile-pic.jpg"), "PictureWhiteBackgrond"))
                     )
                 )
+                
         ));
+        
 
         TextField username = new TextField(SessionManager.getUsername().toString());
         username.setUIID("TextFieldBlack");
-        addStringValue("Username", username);
+        addStringValue("Nom", username);
+        
+         TextField prenom = new TextField(SessionManager.getPrenom().toString());
+        prenom.setUIID("TextFieldBlack");
+        addStringValue("Prenom", prenom);
 
         TextField email = new TextField(SessionManager.getEmail().toString(), "E-Mail", 20, TextField.EMAILADDR);
         email.setUIID("TextFieldBlack");
         addStringValue("E-Mail", email);
         
-        TextField password = new TextField(SessionManager.getPassowrd().toString(), "Password", 20, TextField.PASSWORD);
-        password.setUIID("TextFieldBlack");
-        addStringValue("Password", password);
-
-        CheckBox cb1 = CheckBox.createToggle(res.getImage("on-off-off.png"));
-        cb1.setUIID("Label");
-        cb1.setPressedIcon(res.getImage("on-off-on.png"));
-        CheckBox cb2 = CheckBox.createToggle(res.getImage("on-off-off.png"));
-        cb2.setUIID("Label");
-        cb2.setPressedIcon(res.getImage("on-off-on.png"));
         
-        addStringValue("Facebook", FlowLayout.encloseRightMiddle(cb1));
-        addStringValue("Twitter", FlowLayout.encloseRightMiddle(cb2));
+        TextField cin = new TextField(Integer.toString(SessionManager.getCin()), "Carte d'identité ", 20, TextField.ANY);
+        cin.setUIID("TextFieldBlack");
+        addStringValue("Carte d'identité ", cin);
+        
+        TextField num = new TextField(Integer.toString(SessionManager.getNum()), "Numéro de téléphone ", 20, TextArea.PHONENUMBER);
+
+        num.setUIID("TextFieldBlack");
+        addStringValue("Numéro de téléphone", num);
+ 
+        Button confirme = new Button("Save Changes");
+
+        Label lab = new Label("camera");
+        
+        Button changepass = new Button("Modifer password");
+         /////////////////////////////////// CAMERA ////////////////
+        Image icon = FontImage.createMaterial(FontImage.MATERIAL_CAMERA_ALT, UIManager.getInstance().getComponentStyle("Label"));
+        Button cam = new Button(icon);
+        
+              //add an ActionListener to the cam Button
+        cam.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent evt) {
+                
+                //This will trigger the native camera to display
+                Capture.capturePhoto(new ActionListener() {
+
+                    public void actionPerformed(final ActionEvent evt) {
+                        //if a user cancels the camera the evt will be null
+                        if (evt == null) {
+                            ToastBar.Status s = ToastBar.getInstance().createStatus();
+                            s.setMessage("User Cancelled Camera");             
+                            s.setMessageUIID("Title");
+                            Image i = FontImage.createMaterial(FontImage.MATERIAL_ERROR, UIManager.getInstance().getComponentStyle("Title"));
+                            s.setIcon(i);
+                            s.setExpires(2000);
+                            s.show();
+                            return;
+                        }
+                        
+                        //Create a component to display from the image path
+                        Component imageCmp = createImageComponent((String) evt.getSource());
+                         addComponent(BorderLayout.CENTER, imageCmp);
+                           revalidate();
+
+                    }
+                });
+
+            }
+        });
+
+      add(LayeredLayout.encloseIn(
+                GridLayout.encloseIn(2,lab,cam)
+        ));
+       // new CameraForm(res).show();
+      //  add(BorderLayout.CENTER,confirme);
+         
+       add(LayeredLayout.encloseIn(
+       GridLayout.encloseIn(2,confirme,changepass)
+       ));
+       
+       confirme.requestFocus();
+       confirme.addActionListener(e ->{
+                      ServiceUtilisateur.getInstance().modifieProfil(username, prenom, email, cin, num, res, SessionManager.getId());
+                                  Dialog.show("Success","Modification avec success","OK",null);
+                               //   new ProfileForm(res).show();
+
+
+       });
+       
+       changepass.addActionListener(e ->{
+           new ChangePassForm(res).show();
+        // new CameraForm(res).show();
+        
+       });
+
+
+         
     }
     
     private void addStringValue(String s, Component v) {
@@ -109,4 +191,27 @@ public class ProfileForm extends BaseForm {
                 add(BorderLayout.CENTER, v));
         add(createLineSeparator(0xeeeeee));
     }
+    
+    
+         private Component createImageComponent(String path) {
+        InputStream is = null;
+        try {
+            System.out.println("path " + path);
+            is = com.codename1.io.FileSystemStorage.getInstance().openInputStream(path);
+            Image i = Image.createImage(is);
+            ImageViewer view = new ImageViewer(i.scaledWidth(Display.getInstance().getDisplayWidth()));
+            return view;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return null;
+
+    }
+
 }

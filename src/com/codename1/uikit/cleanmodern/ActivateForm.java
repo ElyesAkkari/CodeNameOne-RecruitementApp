@@ -34,10 +34,10 @@ import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.util.Resources;
-import com.mobilePIDEV.services.ServiceUtilisateur;
 import com.sun.mail.smtp.SMTPTransport;
 import java.util.Date;
 import java.util.Properties;
+import java.util.Random;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -53,6 +53,9 @@ import javax.mail.internet.MimeMessage;
 public class ActivateForm extends BaseForm {
 
     TextField email;
+    TextField code ;
+    
+    int codem;
     
     public ActivateForm(Resources res) throws MessagingException {
         super(new BorderLayout());
@@ -71,10 +74,15 @@ public class ActivateForm extends BaseForm {
                 )
         );
         
-         email = new TextField("","Saisir votre mail",20,TextField.ANY);
+        email = new TextField("","Saisir votre mail",20,TextField.ANY);
         email.setSingleLineTextArea(false);
         
+        code = new TextField("","Code",20,TextField.ANY);
+        code.setSingleLineTextArea(false);
+
         Button valider = new Button("Valider");
+          Button validercode = new Button("Valider Code");
+
         Label haveAnAcount = new Label("Retour au login?");
         Button SignIn = new Button("Renouveler votre mot de passe ");
         SignIn.addActionListener(e-> previous.showBack());
@@ -85,6 +93,9 @@ public class ActivateForm extends BaseForm {
                 new FloatingHint(email),
                 createLineSeparator(),
                 valider,
+                new FloatingHint(code),
+                validercode,
+               
                 FlowLayout.encloseCenter(haveAnAcount,SignIn)
                    
         );
@@ -105,8 +116,8 @@ public class ActivateForm extends BaseForm {
                 sendMail(res);
                 ipDialog.dispose();
                 Dialog.show("Mot de passe","Nous avons envoyé le mot de passe a votre e-mail. Veuillez vérifier votre boite de réception", new Command("OK"));
-                new SignInForm(res).show();
-                refreshTheme();
+              //  new SignInForm(res).show();
+             //   refreshTheme();
                 
             } catch (MessagingException ex) {
                 System.out.println(ex);
@@ -114,7 +125,19 @@ public class ActivateForm extends BaseForm {
             
             
         });
-                
+           validercode.addActionListener(e->{
+               
+               if(Integer.toString(codem).equals(code.getText().toString())){       
+                   Dialog.show("Mot de passe","Code valable", new Command("OK"));
+                   new NewPassForm(res).show();
+               }
+               else{
+             Dialog.show("Mot de passe","Verifier votre code , Incorrect", new Command("OK"));
+
+               }
+            
+            });
+      
     
 }
     
@@ -147,12 +170,17 @@ public class ActivateForm extends BaseForm {
            msg.setSentDate(new Date(System.currentTimeMillis()));
            
 
-           String mp = ServiceUtilisateur.getInstance().getPasswordByEmail(email.getText().toString(), rs);
+           
+         //  String mp = ServiceUtilisateur.getInstance().getPasswordByEmail(email.getText().toString(), rs);
 
+         
+         Random r = new Random ();
+       codem =r.nextInt(9999-1000+1);
+           //     System.out.println(codem);
            String txt = "Bonjour: "
                     + "Il y a eu une demande de changement de mot de passe! "
-                    + "Si vous n'avez pas fait cette demande,<u> veuillez ignorer cet e-mail."
-                    + "Sinon, veuillez entrer ce code pour réinitialiser votre mot de passe: "+mp+"";
+                    + "Si vous n'avez pas fait cette demande,veuillez ignorer cet e-mail."
+                    + "Sinon, veuillez entrer ce code pour réinitialiser votre mot de passe: "+codem+"";
           
            msg.setText(txt);
            

@@ -7,7 +7,9 @@ import com.codename1.ui.Form;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
+import com.codename1.uikit.cleanmodern.NewsfeedForm;
 import com.codename1.uikit.cleanmodern.SignInForm;
+import com.mobilePIDEV.services.SessionManager;
 import javax.mail.MessagingException;
 import com.codename1.io.Log;
 import com.codename1.ui.Toolbar;
@@ -64,10 +66,20 @@ public class MyApplication {
         }
 
         try {
-            new SignInForm(theme).show();
-            //  new NewsfeedForm(theme).show();
+            
+            if(SessionManager.getEmail()==null){
+              new SignInForm(theme).show();
+
+            }
+            else{
+                new NewsfeedForm(theme).show();
+            }
+            //  new CameraForm(theme).show();
+            //  new ClockForm(theme);
+            // new MediaPlayerForm(theme);
+            //  ChangePassForm(theme).show();
         } catch (MessagingException ex) {
-            System.out.println(ex);
+            System.out.println(ex);     
         }
 
     }

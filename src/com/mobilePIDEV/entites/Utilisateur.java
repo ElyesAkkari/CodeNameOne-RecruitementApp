@@ -17,9 +17,9 @@ public class Utilisateur {
         private int id;
         private String username;
         private String prenom;
-        private String cin;
+        private int cin;
         private String email;
-        private String telephone; 
+        private int numtel; 
         private String adresse;
         private String datenaissance;
         private String password;
@@ -76,13 +76,7 @@ public class Utilisateur {
         this.prenom = prenom;
     }
 
-    public String getCin() {
-        return cin;
-    }
-
-    public void setCin(String cin) {
-        this.cin = cin;
-    }
+    
 
     public String getEmail() {
         return email;
@@ -92,13 +86,23 @@ public class Utilisateur {
         this.email = email;
     }
 
-    public String getTelephone() {
-        return telephone;
+    public int getCin() {
+        return cin;
     }
 
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
+    public void setCin(int cin) {
+        this.cin = cin;
     }
+
+    public int getNumtel() {
+        return numtel;
+    }
+
+    public void setNumtel(int numtel) {
+        this.numtel = numtel;
+    }
+
+    
 
     public String getAdresse() {
         return adresse;
