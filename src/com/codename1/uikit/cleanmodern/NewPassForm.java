@@ -8,12 +8,15 @@ package com.codename1.uikit.cleanmodern;
 import com.codename1.components.FloatingHint;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Label;
 import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.util.Resources;
+import com.mobilePIDEV.services.ServiceUtilisateur;
+import javax.mail.MessagingException;
 
 /**
  *
@@ -54,14 +57,25 @@ TextField password = new TextField("","Saisir votre nouveau mot de passe ",20,Te
         
         add(BorderLayout.CENTER,content);
         
-        valider.requestFocus();
+        //valider.requestFocus();
+        valider.addActionListener(e ->{
+                  ServiceUtilisateur.getInstance().newPassword(password.getText().toString(),str, res);
+                          Dialog.show("Sucess","password modifier avec success","OK",null);
+                          
+            try {
+                new SignInForm(res).show();
+            } catch (MessagingException ex) {
+                System.out.println(ex);
+            }
         
        
             
        
       
     
-}
+        });
+        }
+                
 
     
 }

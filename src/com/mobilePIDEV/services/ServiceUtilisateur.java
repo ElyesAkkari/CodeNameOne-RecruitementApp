@@ -276,19 +276,36 @@ public class ServiceUtilisateur {
         NetworkManager.getInstance().addToQueueAndWait(req);
     }
 
-    public void newPassword(TextField password, String email, Resources rs) {
-
-        String url = Statics.BASE_URL + "newpassword?email=" + email + "&password=" + password;
-        req.setUrl(url);
-
-        req.addResponseListener((e) -> {
-            byte[] data = (byte[]) e.getMetaData();
-            String responseData = new String(data);
-            System.out.println("data ===>" + responseData);
-
-        });
-
+//    public void newPassword(TextField password, String email, Resources rs) {
+//
+//        String url = Statics.BASE_URL + "newpassword?email=" + email + "&password=" + password;
+//        req.setUrl(url);
+//
+//        req.addResponseListener((e) -> {
+//            byte[] data = (byte[]) e.getMetaData();
+//            String responseData = new String(data);
+//            System.out.println("data ===>" + responseData);
+//
+//        });
+//
+//        NetworkManager.getInstance().addToQueueAndWait(req);
+//
+//    }
+    public void newPassword(String password , String email , Resources rs){
+            
+         String url = Statics.BASE_URL+"newpassword?email="+email+"&password="+password;
+               req.setUrl(url);
+               
+               
+               req.addResponseListener((e)->{
+                byte[]data = (byte[]) e.getMetaData();
+              String  responseData = new String(data);
+                System.out.println("data ===>"+responseData);
+             
+            });
+            
         NetworkManager.getInstance().addToQueueAndWait(req);
 
-    }
+
+        }
 }

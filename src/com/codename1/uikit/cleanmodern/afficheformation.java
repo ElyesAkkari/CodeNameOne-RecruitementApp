@@ -146,17 +146,43 @@ public class afficheformation extends BaseForm {
         Component.setSameSize(radioContainer, spacer1, spacer2);
         add(LayeredLayout.encloseIn(swipe, radioContainer));
 
+//        ButtonGroup barGroup = new ButtonGroup();
+//        RadioButton formation = RadioButton.createToggle("Formation", barGroup);
+//        formation.setUIID("SelectBar");
+//
+//        Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
+//
+//        add(LayeredLayout.encloseIn(
+//                GridLayout.encloseIn(3, formation),
+//                FlowLayout.encloseBottom(arrow)
+//        ));
         ButtonGroup barGroup = new ButtonGroup();
-        RadioButton formation = RadioButton.createToggle("Formation", barGroup);
+        RadioButton all = RadioButton.createToggle("Jobs", barGroup);
+        all.setUIID("SelectBar");
+        RadioButton featured = RadioButton.createToggle("Events", barGroup);
+        featured.setUIID("SelectBar");
+        RadioButton formation = RadioButton.createToggle("Formations", barGroup);
         formation.setUIID("SelectBar");
-
+        RadioButton myFavorite = RadioButton.createToggle("Results", barGroup);
+        myFavorite.setUIID("SelectBar");
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
 
         add(LayeredLayout.encloseIn(
-                GridLayout.encloseIn(3, formation),
+                GridLayout.encloseIn(4, all, featured, formation, myFavorite),
                 FlowLayout.encloseBottom(arrow)
         ));
-
+        myFavorite.addActionListener(l
+                -> new ResultsForm(res).show()
+        );
+        featured.addActionListener(l
+                -> new EventForm(res).show()
+        );
+        formation.addActionListener(l
+                -> new afficheformation(res).show()
+        );
+        all.addActionListener(l
+                -> new afficheroffre(res).show()
+        );
         formation.setSelected(true);
         // question.addActionListener(l-> new QuestionForm(res).show());
         // rep.addActionListener(l -> new ReponseForm(res).show());
@@ -166,8 +192,9 @@ public class afficheformation extends BaseForm {
             updateArrowPosition(formation, arrow);
         });
         bindButtonSelection(formation, arrow);
-        //  bindButtonSelection(question, arrow);
-        // bindButtonSelection(rep, arrow);
+        bindButtonSelection(all, arrow);
+        bindButtonSelection(featured, arrow);
+        bindButtonSelection(myFavorite, arrow);
 
         // special case for rotation
         addOrientationListener(e -> {
@@ -376,7 +403,7 @@ public class afficheformation extends BaseForm {
 //        t.addTab("Comments", listss);
 //        t.setScrollableY(true);
 //        add(t);
-add(listss);
+        add(listss);
     }
 
     private Container createCoursContainer(commantaire commentaires) {
@@ -390,7 +417,6 @@ add(listss);
 //        butStylebn.setMargin(Component.BOTTOM, 50);
 //        butStylebn.setMargin(Component.TOP, 30);
 //        butStylebn.setMargin(Component.LEFT, 2);
-
         Label titre1 = new Label("Contenu:");
 
 //SpanLabel sp = new SpanLabel(); pour le retour a la ligne
@@ -405,10 +431,8 @@ add(listss);
         cnt.add(titre);
 
 //        cnt.add(bt);
-
         //Style st = cnt.getAllStyles();
         //st.setMargin(Component.BOTTOM, 2);
-
         titre.setText(commentaires.getBody());
 
         Container c4 = BoxLayout.encloseX();
