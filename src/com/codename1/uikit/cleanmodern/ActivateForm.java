@@ -129,7 +129,7 @@ public class ActivateForm extends BaseForm {
                
                if(Integer.toString(codem).equals(code.getText().toString())){       
                    Dialog.show("Mot de passe","Code valable", new Command("OK"));
-                   new NewPassForm(res).show();
+                   new NewPassForm(res,email.getText().toString()).show();
                }
                else{
              Dialog.show("Mot de passe","Verifier votre code , Incorrect", new Command("OK"));
@@ -192,8 +192,7 @@ public class ActivateForm extends BaseForm {
                
            } catch (MessagingException e) {
                            e.printStackTrace();
-
-               
+   
            }
 } 
     

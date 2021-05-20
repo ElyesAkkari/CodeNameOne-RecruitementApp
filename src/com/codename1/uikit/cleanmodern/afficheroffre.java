@@ -134,6 +134,9 @@ public class afficheroffre extends BaseForm {
         myFavorite.addActionListener(l
                 -> new ResultsForm(res).show()
         );
+        popular.addActionListener(l
+                -> new afficheformation(res).show()
+        );
         featured.addActionListener(l
                 -> new EventForm(res).show()
         );

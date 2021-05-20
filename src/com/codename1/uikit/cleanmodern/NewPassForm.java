@@ -24,7 +24,7 @@ public class NewPassForm extends BaseForm {
     
     
     
-        public NewPassForm(Resources res)  {
+        public NewPassForm(Resources res, String str)  {
         super(new BorderLayout());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);

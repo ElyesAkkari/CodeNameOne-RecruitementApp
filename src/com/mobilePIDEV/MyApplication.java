@@ -16,15 +16,23 @@ import com.codename1.ui.Toolbar;
 import java.io.IOException;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.io.NetworkEvent;
-import com.codename1.uikit.cleanmodern.AddEventForm;
-import com.codename1.uikit.cleanmodern.EventForm;
-import com.codename1.uikit.cleanmodern.HomeForm;
+
+//import com.codename1.uikit.cleanmodern.AddEventForm;
+//import com.codename1.uikit.cleanmodern.EventForm;
+//import com.codename1.uikit.cleanmodern.HomeForm;
+//import com.codename1.uikit.cleanmodern.NewsfeedForm;
+//import com.codename1.uikit.cleanmodern.ProfileForm;
+//import com.codename1.uikit.cleanmodern.SignInForm;
+//import com.codename1.uikit.cleanmodern.SignUpForm;
+//import com.codename1.uikit.cleanmodern.SponsorForm;
+//import com.codename1.uikit.cleanmodern.WalkthruForm;
+
+
 import com.codename1.uikit.cleanmodern.NewsfeedForm;
-import com.codename1.uikit.cleanmodern.ProfileForm;
 import com.codename1.uikit.cleanmodern.SignInForm;
-import com.codename1.uikit.cleanmodern.SignUpForm;
-import com.codename1.uikit.cleanmodern.SponsorForm;
-import com.codename1.uikit.cleanmodern.WalkthruForm;
+import com.codename1.uikit.cleanmodern.addfor;
+import com.codename1.uikit.cleanmodern.afficheformation;
+import com.codename1.uikit.cleanmodern.afficheroffre;
 
 
 /**
@@ -65,6 +73,7 @@ public class MyApplication {
             return;
         }
 
+
         try {
             
             if(SessionManager.getEmail()==null){
@@ -72,7 +81,7 @@ public class MyApplication {
 
             }
             else{
-                new NewsfeedForm(theme).show();
+                new afficheroffre(theme).show();
             }
             //  new CameraForm(theme).show();
             //  new ClockForm(theme);
@@ -81,6 +90,9 @@ public class MyApplication {
         } catch (MessagingException ex) {
             System.out.println(ex);     
         }
+
+
+        //new afficheformation(theme).show();
 
     }
 
