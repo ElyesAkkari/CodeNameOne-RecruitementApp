@@ -11,8 +11,10 @@ import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.events.ActionListener;
+import com.mobilePIDEV.entites.commentaire;
 import com.mobilePIDEV.entites.formateur;
 import com.mobilePIDEV.entites.formation;
+import com.mobilePIDEV.entites.participer;
 import com.mobilePIDEV.utils.Statics;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -125,23 +127,23 @@ public class serviceformation {
         return post;
     }
          
-         public ArrayList<formation> DeleteformationtAction(int id){
-        String url =Statics.BASE_URL + "formation/deleteformation" + "?id=" + id;
-         ConnectionRequest req = new ConnectionRequest(url);
-         System.out.println(url);
-         req.setUrl(url);
-         req.setPost(false);
-         req.addResponseListener(new ActionListener<NetworkEvent>() {
+          public boolean deleteformation(formation q) {
+        ConnectionRequest con = new ConnectionRequest();
+        String Url = "http://127.0.0.1:8000/deleteformation?id=" + q.getId();
+        req.setUrl(Url);
+        req.addResponseListener(new ActionListener<NetworkEvent>() {
+
             @Override
             public void actionPerformed(NetworkEvent evt) {
-            
-                    req.removeResponseListener(this);
-              
+                resultOK=req.getResponseCode()==200;
+                req.removeResponseListener(this);
             }
+
         });
         NetworkManager.getInstance().addToQueueAndWait(req);
-        return post;
-    } 
+        return resultOK;
+
+    }
          
             public boolean UpdateformationrAction(formation f) {
        // String url = Statics.BASE_URL + "/addposteJson/new?prix="+ f.getPrix()+ "&datedeb=" + f.getDatedeb()+"&nbrparticipant="+f.getNbrparticipant()+"&nbrheures="+f.getNbrheures()+"&nom="+f.getNom()+"&image="+f.getImage();
@@ -159,4 +161,40 @@ public class serviceformation {
         NetworkManager.getInstance().addToQueueAndWait(req);
         return resultOK;   }
      
+            
+            
+             public boolean addParticipation(int id) {
+        //String url = Statics.BASE_URL +"/new/"+ t.getNom() + "/" + t.getDescription()+ "/" + t.getAdresse()+ "/" + t.getDomaine(); //création de l'URL
+        String url = Statics.BASE_URL+"addparticipant?id="+id;
+       
+        
+        req.setUrl(url);// Insertion de l'URL de notre demande de connexion
+        req.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                resultOK = req.getResponseCode() == 200; //Code HTTP 200 OK
+                req.removeResponseListener(this); //Supprimer cet actionListener
+                /* une fois que nous avons terminé de l'utiliser.
+                La ConnectionRequest req est unique pour tous les appels de 
+                n'importe quelle méthode du Service task, donc si on ne supprime
+                pas l'ActionListener il sera enregistré et donc éxécuté même si 
+                la réponse reçue correspond à une autre URL(get par exemple)*/
+                
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(req);
+        return resultOK;
+    }
+         public boolean addCommentaire(commentaire c,int id){
+         String url = Statics.BASE_URL+"addComment?id="+id+"&body="+c.getBody();
+                 ConnectionRequest req1 = new ConnectionRequest(url);
+                 req1.setPost(false);
+                  req1.addResponseListener((evt)->{
+             
+                  resultOK= req1.getResponseCode() == 200; // code http 200 OK
+              
+        });
+        NetworkManager.getInstance().addToQueueAndWait(req1);
+         return resultOK;
+     }
 }

@@ -21,8 +21,12 @@ package com.codename1.uikit.cleanmodern;
 
 import com.codename1.components.ImageViewer;
 import com.codename1.components.ScaleImageLabel;
+import com.codename1.components.SliderBridge;
 import com.codename1.components.SpanLabel;
 import com.codename1.components.ToastBar;
+import com.codename1.io.ConnectionRequest;
+import com.codename1.io.NetworkManager;
+import com.codename1.ui.AutoCompleteTextField;
 import com.codename1.ui.Button;
 import com.codename1.ui.ButtonGroup;
 import com.codename1.ui.Command;
@@ -34,24 +38,32 @@ import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
+import com.codename1.ui.Font;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
 import com.codename1.ui.RadioButton;
+import com.codename1.ui.Slider;
 import com.codename1.ui.Tabs;
 import com.codename1.ui.TextArea;
+import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.URLImage;
+import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
+import com.codename1.ui.plaf.Border;
 import com.codename1.ui.plaf.Style;
+import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
+import com.mobilePIDEV.entites.commentaire;
 import com.mobilePIDEV.entites.formation;
+import com.mobilePIDEV.services.servicecommentaire;
 import com.mobilePIDEV.services.serviceformation;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,8 +77,17 @@ public class afficheformation extends BaseForm {
 
     
     ArrayList<formation> formations;
+     public static ArrayList<commentaire> listeC;
+     static int priceminA ;
+              static      int  pricemaxA;
+              static        boolean  enventeA= true;
+static String  rechercher;
 
     public afficheformation(Resources res) {
+      
+        
+        
+
         super("ResultsForm", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
@@ -166,17 +187,24 @@ public class afficheformation extends BaseForm {
                 System.out.println("eeee");
             }
         }
+           
         Button addformation = new Button("ajouter une formation");
         addformation.addActionListener(l -> {
-            new afficheformation(res).show();
-        });
+            new addfor(res).show();
+      });
         this.add(addformation);
-
+      
+    
+        
+      //  this.add(listeC);
+ 
+        
 //        addButton(res.getImage("news-item-2.jpg"), "Fusce ornare cursus masspretium tortor integer placera.", true, 15, 21);
 //        addButton(res.getImage("news-item-3.jpg"), "Maecenas eu risus blanscelerisque massa non amcorpe.", false, 36, 15);
 //        addButton(res.getImage("news-item-4.jpg"), "Pellentesque non lorem diam. Proin at ex sollicia.", false, 11, 9);
 //    
     }
+   
 
     private void updateArrowPosition(Button b, Label arrow) {
         arrow.getUnselectedStyle().setMargin(LEFT, b.getX() + b.getWidth() / 2 - arrow.getWidth() / 2);
@@ -240,8 +268,9 @@ public class afficheformation extends BaseForm {
         Label nbrheures = new Label("Nombre d'heures : " + q.getNbrheures());
         Label nbrparticipants = new Label("Nombre de participants : " + q.getNbrparticipant());
         
-                
-                 
+
+            AutoCompleteTextField ac = new AutoCompleteTextField("", "Type here...","Short", "Shock", "Sholder", "Shrek" , "belle formation", "nice" ,"j'aime" , "hi" , "cool", "je" ,"suis","d'accord","participe","a","cette","formation");
+        
                 Image img;
                 ImageViewer iv=new ImageViewer();
                 EncodedImage ec;
@@ -255,32 +284,35 @@ public class afficheformation extends BaseForm {
                
           
               //  cn.addAll(iv);
-                this.add(iv);
+             //   this.add(iv);
             
             // SpanLabel posteListSP = new SpanLabel();
             // posteListSP.setText(p.toString());
            
-
-        
         Container cnt = BorderLayout.west(
                 BoxLayout.encloseY(
+                  BoxLayout.encloseX(iv),
+
                         BoxLayout.encloseX(nom),
                         BoxLayout.encloseX(prix),
                          BoxLayout.encloseX(nbrparticipants),
 
                         BoxLayout.encloseX(nbrheures)
+                     
                 ));
-        Button btn = new Button();
+        
+           
+     
         cnt.addPointerPressedListener(l -> {
-            Dialog dlg = new Dialog("Quiz");
+            Dialog dlg = new Dialog("Formation");
             Button edit = new Button("modifier");
             Button delete = new Button("suprimer");
 
             delete.addActionListener(del -> {
                 if (Dialog.show("Confirmation", "suprimer \" " + q.getNom() + "\" ?", "ok", "cancel")) {
 
-                   if (serviceformation.getInstance().UpdateformationrAction(q)) {
-                      Dialog.show("Success", "Quiz Deleted", new Command("OK"));
+                   if (serviceformation.getInstance().deleteformation(q)) {
+                        Dialog.show("Success", "Formation Deleted", new Command("OK"));
                         new afficheformation(res).show();
                     } else {
                         Dialog.show("ERROR", "Server error", new Command("OK"));
@@ -289,21 +321,46 @@ public class afficheformation extends BaseForm {
             });
 
             edit.addActionListener(ed -> {
-        //        new EditQuizForm(res, q).show();
+              //  new EditQuizForm(res, q).show();
             });
             dlg.setLayout(BoxLayout.y());
          //   dlg.add(new SpanLabel("Titre : " + q.getTitre() + "\nCreated by : " + q.getOwner(), "DialogBody"));
-          
-
+            
             dlg.addAll(edit, delete);
-            // dlg.add(delete);
+             dlg.add(delete);
             int h = Display.getInstance().getDisplayHeight();
             dlg.setDisposeWhenPointerOutOfBounds(true);
-            dlg.show(h / 11 * 7, 0, 0, 0);
+            dlg.show(h / 11 * 7, 5, 5, 5);
         });
         add(cnt);
+           // Form hi = new Form("Star Slider", new BoxLayout(BoxLayout.Y_AXIS));
+            this.add(FlowLayout.encloseCenter(createStarRankSlider()));
+              this.show();
+             
+               Button addformatio = new Button("Commenter");
+        addformatio.addActionListener(l -> {
+                                    String comment12 = ac.getText();
 
+             commentaire c = new    commentaire(q.getId(),comment12);
+         if(   serviceformation.getInstance().addCommentaire(c, q.getId()))
+            Dialog.show("Success","commentaire ajouté",new Command("OK"));
+          else
+          Dialog.show("ERROR", "Server error", new Command("OK"));
+
+            System.out.println("ggggggggggg");
+        });
+        this.add(addformatio);
+          Button addformation = new Button("Participer");
+        addformation.addActionListener(l -> {
+            serviceformation.getInstance().addParticipation(q.getId());
+            System.out.println("ggggggggggg");
+        });
+        this.add(ac);
+        this.add(addformation);
+     
+       // this.add(affichecomm(q));
         //cnt.addActionListener(e -> ToastBar.showMessage(title, FontImage.MATERIAL_INFO));
+        
     }
 
     private void addResult(Image img) {
@@ -317,4 +374,103 @@ public class afficheformation extends BaseForm {
             }
         });
     }
+    private  void affichecomm(formation q){
+        listeC=servicecommentaire.getInstance().getAllCommentsAction(q.getId());
+ Style s3=getAllStyles();
+   Container listss = new Container(BoxLayout.y());
+        Container lists = new Container(BoxLayout.y());
+           for(commentaire comm : listeC) {
+            listss.add(createCoursContainer(comm));
+        }
+      /*************************/
+            Style st=lists.getAllStyles();
+        st.setMargin(Component.BOTTOM,900);
+        st.setMargin(Component.TOP,50);
+        Tabs t = new Tabs();
+        Style s = UIManager.getInstance().getComponentStyle("Tab");
+         t.setUIID("Tab");        
+        t.addTab("Comments", listss);
+        t.setScrollableY(true);
+    }
+    private Container createCoursContainer(commentaire commentaires) {
+           
+            Button bt=new Button("Like");
+            Style butStylebn=bt.getAllStyles();
+       
+            //butStylebnm.setFgColor(0x000000);   
+              butStylebn.setBgTransparency(255);
+        butStylebn.setMarginUnit(Style.UNIT_TYPE_DIPS);
+        butStylebn.setMargin(Component.BOTTOM, 50);
+        butStylebn.setMargin(Component.TOP,30);
+        butStylebn.setMargin(Component.LEFT,2);
+
+            Label titre1 = new Label("Contenu:");
+  
+     
+//SpanLabel sp = new SpanLabel(); pour le retour a la ligne
+            SpanLabel titre =  new SpanLabel("");
+
+
+           
+
+           Container cnt = new Container(new BoxLayout(BoxLayout.Y_AXIS));
+           cnt.getStyle().setBgColor(0xFFFFFF);
+        cnt.getStyle().setBgTransparency(255);
+        titre.getAllStyles().setFgColor(0x000000);
+      
+         titre1.getAllStyles().setFgColor(0xff6600);
+       
+        
+        
+        
+            cnt.add(titre1);
+            cnt.add(titre);
+           
+            cnt.add(bt);
+            
+
+        Style st=cnt.getAllStyles();
+        st.setMargin(Component.BOTTOM,2);
+
+
+            titre.setText(commentaires.getBody());    
+           
+     
+Container c4=BoxLayout.encloseX();
+    //btm.addActionListener(e->{ b=products ;});
+  //pur le bouton like:
+//  bt.addActionListener(e->{ b=commentaire;new ShowClient(currentB).show(); });
+       
+            /***************************/
+     
+          
+                   return BorderLayout.center(cnt).add(BorderLayout.EAST,c4);
+                   
+                   
+        }
+    private void initStarRankStyle(Style s, Image star) {
+    s.setBackgroundType(Style.BACKGROUND_IMAGE_TILE_BOTH);
+    s.setBorder(Border.createEmpty());
+    s.setBgImage(star);
+    s.setBgTransparency(0);
+}
+
+private Slider createStarRankSlider() {
+    Slider starRank = new Slider();
+    starRank.setEditable(true);
+    starRank.setMinValue(0);
+    starRank.setMaxValue(10);
+Font fnt = Font.createTrueTypeFont(Font.NATIVE_MAIN_LIGHT, 15f).           derive(Display.getInstance().convertToPixels(5, true), Font.STYLE_PLAIN);
+    Style s = new Style(0xffff33, 0, fnt, (byte)0);
+    Image fullStar = FontImage.createMaterial(FontImage.MATERIAL_STAR, s).toImage();
+    s.setOpacity(100);
+    s.setFgColor(0);
+    Image emptyStar = FontImage.createMaterial(FontImage.MATERIAL_STAR, s).toImage();
+    initStarRankStyle(starRank.getSliderEmptySelectedStyle(), emptyStar);
+    initStarRankStyle(starRank.getSliderEmptyUnselectedStyle(), emptyStar);
+    initStarRankStyle(starRank.getSliderFullSelectedStyle(), fullStar);
+    initStarRankStyle(starRank.getSliderFullUnselectedStyle(), fullStar);
+    starRank.setPreferredSize(new Dimension(fullStar.getWidth() * 5, fullStar.getHeight()));
+    return starRank;
+}
 }

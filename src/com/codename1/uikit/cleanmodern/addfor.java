@@ -5,6 +5,7 @@
  */
 package com.codename1.uikit.cleanmodern;
 
+import com.codename1.components.MultiButton;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.ToastBar;
 import com.codename1.io.FileSystemStorage;
@@ -45,13 +46,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import com.codename1.l10n.SimpleDateFormat;
+import com.codename1.ui.ComboBox;
+import com.codename1.ui.Form;
+import com.codename1.ui.list.GenericListCellRenderer;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 /**
  *
  * @author 21628
  */
 public class addfor extends BaseForm {
+    
     public addfor(Resources res) {
         super("ResultsForm", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
@@ -162,13 +169,25 @@ public class addfor extends BaseForm {
 
           TextField tfY= new TextField("","datedeb");
           tfY.setUIID("TextFieldBlack");
+        Label formateur = new Label("les formateur : ");
 
 Picker datePicker = new Picker();
         datePicker.setType(Display.PICKER_TYPE_DATE);
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy/MM/dd");
         
         datePicker.setFormatter(dateFormatter);
-        System.out.println(datePicker.getText());
+          Form hi = new Form("les formateur", new BoxLayout(BoxLayout.Y_AXIS));
+
+         ComboBox<Map<String, Object>> combo = new ComboBox<> (
+          createListEntry("Amine msallem", "02/06/1996"),
+          createListEntry("ahmed zaghdoudi", "01/05/1980"),
+          createListEntry("wissem bettaieb", "01/03/1984"),
+          createListEntry("houyem mkhinini", "06/08/1979"),
+          createListEntry("ons ben fadhel", "04/09/1987"),
+          createListEntry("elyes akari", "05/12/1990"),
+          createListEntry("hazem ben salem", "04/09/1987"));
+  
+  combo.setRenderer(new GenericListCellRenderer<>(new MultiButton(), new MultiButton()));
          TextField image = new TextField("");
          image.setUIID("TextFieldBlack");
 
@@ -217,7 +236,8 @@ Picker datePicker = new Picker();
                  
           
        Button addBtn = new Button("add ");
-       this.addAll(nom,tfprix,description,tfparticipant,tfheures,image,datePicker,addBtn,uploadbtn);
+       
+       this.addAll(nom,tfprix,description,tfparticipant,tfheures,image,datePicker,formateur,combo,addBtn,uploadbtn);
        addBtn.addActionListener((evt) -> {
             
             if (nom.getText().length() ==0 || description.getText().length()==0|| image.getText().length()==0) {
@@ -235,7 +255,7 @@ Picker datePicker = new Picker();
                         Dialog.show("Success", "Task added successfully.",null, "OK");
                     }
                     
-               
+               new afficheformation(res).show();
                 
                 
                 
@@ -325,5 +345,15 @@ Picker datePicker = new Picker();
 
         //add(createLineSeparator(0x33fec3));
     }
+  
+ 
+
+
+private Map<String, Object> createListEntry(String name, String date) {
+    Map<String, Object> entry = new HashMap<>();
+    entry.put("Line1", name);
+    entry.put("Line2", date);
+    return entry;
+}
     
 }
