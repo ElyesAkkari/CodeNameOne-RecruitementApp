@@ -2,18 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/DELL/Desktop/MobilePidev/src/com/mobilePIDEV/services/ServiceUtilisateur.java</file>
-            <file>file:/C:/Users/DELL/Desktop/MobilePidev/src/com/codename1/uikit/cleanmodern/NewPassForm.java</file>
-            <file>file:/C:/Users/DELL/Desktop/MobilePidev/src/com/codename1/demos/clock/ClockDemo.java</file>
-            <file>file:/C:/Users/DELL/Desktop/MobilePidev/src/com/codename1/uikit/cleanmodern/addfor.java</file>
-            <file>file:/C:/Users/DELL/Desktop/MobilePidev/src/com/codename1/uikit/cleanmodern/ProfileForm.java</file>
-            <file>file:/C:/Users/DELL/Desktop/MobilePidev/src/com/codename1/uikit/cleanmodern/BaseForm.java</file>
-            <file>file:/C:/Users/DELL/Desktop/MobilePidev/src/com/mobilePIDEV/services/servicecommantaire.java</file>
-            <file>file:/C:/Users/DELL/Desktop/MobilePidev/src/com/codename1/uikit/cleanmodern/NewsfeedForm.java</file>
-            <file>file:/C:/Users/DELL/Desktop/MobilePidev/src/com/codename1/uikit/cleanmodern/ActivateForm.java</file>
-            <file>file:/C:/Users/DELL/Desktop/MobilePidev/src/com/mobilePIDEV/MyApplication.java</file>
-            <file>file:/C:/Users/DELL/Desktop/MobilePidev/src/com/codename1/uikit/cleanmodern/afficheformation.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
